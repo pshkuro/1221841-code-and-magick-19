@@ -8,9 +8,9 @@ var GAP = 15;
 var FONT_GAP = 15; // междустрочный интервал
 var HELLO_HEIGHT = 50; // высота блока верхнего текста
 var TEXT_HEIGHT = 20; // высота текста
-var barHeight = CLOUD_HEIGHT - GAP - HELLO_HEIGHT - TEXT_HEIGHT - TEXT_HEIGHT - GAP; // высота колонки
 var BAR_WIDTH = 40; // ширина колонки
 var BAR_GAP = 50; // расстояние между колонками
+var barHeight = CLOUD_HEIGHT - GAP - HELLO_HEIGHT - TEXT_HEIGHT - TEXT_HEIGHT - GAP; // высота колонки
 
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
