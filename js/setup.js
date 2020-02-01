@@ -135,23 +135,28 @@ setupClose.addEventListener('keydown', function (evt) {
 // Реализовываем выбор цвета характеристик персонажа по нажатию
 var setupWizard = document.querySelector('.setup-wizard');
 var wizardCoat = setupWizard.querySelector('.wizard-coat');
+var wizardCoatInput = document.querySelector('input[name="coat-color"]');
 var wizardEyes = setupWizard.querySelector('.wizard-eyes');
+var wizardEyesInput = document.querySelector('input[name="eyes-color"]');
 var fireballColor = document.querySelector('.setup-fireball-wrap');
-
-function setRandomFillColor(element, arr) {
-  element.style.fill = getRandomArrayItem(arr);
-}
+var fireballColorInput = document.querySelector('input[name="fireball-color"]');
 
 wizardCoat.addEventListener('click', function () {
-  setRandomFillColor(wizardCoat, COAT_COLORS);
+  var color = getRandomArrayItem(COAT_COLORS);
+  wizardCoat.style.fill = color;
+  wizardCoatInput.value = color;
 });
 
 wizardEyes.addEventListener('click', function () {
-  setRandomFillColor(wizardEyes, EYES_COLORS);
+  var color = getRandomArrayItem(EYES_COLORS);
+  wizardEyes.style.fill = color;
+  wizardEyesInput.value = color;
 });
 
 fireballColor.addEventListener('click', function () {
-  fireballColor.style.background = getRandomArrayItem(FIREBALL_COLORS);
+  var color = getRandomArrayItem(FIREBALL_COLORS);
+  fireballColor.style.background = color;
+  fireballColorInput.value = color;
 });
 
 
