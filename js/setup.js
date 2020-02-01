@@ -41,7 +41,7 @@ function createWizards(num) {
 
 // показываем общий блок для выбора wizard
 var dialogUser = document.querySelector('.setup');
-dialogUser.classList.remove('hidden');
+// dialogUser.classList.remove('hidden');
 
 // показываем блок, где будут располагаться наши похожие wizard
 document.querySelector('.setup-similar').classList.remove('hidden');
@@ -73,4 +73,61 @@ var renderWizards = function (data) {
 
 renderWizards(wizardsData);
 
+// Работаем над интерфейсом окна dialogUser
+var ESC_KEY = 'Escape';
+var ENTER_KEY = 'Enter';
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = dialogUser.querySelector('.setup-close');
+var setupSumbit = document.querySelector('.setup-submit');
 
+// Отправка формы на сервер через кнопку Сохранить
+var setupSubmitHandler = function () {
+  setupSumbit.submit();
+};
+
+var setupSubmitEnterHandler = function (evt) {
+  if (evt.key === ENTER_KEY) {
+    setupSumbit.submit();
+  }
+};
+
+// Открытие/закрытие окна
+var popupEscPressHandler = function (evt) {
+  if (evt.key === ESC_KEY && evt.target.tagName !== 'INPUT') {
+    closePopup();
+  }
+};
+
+var openPopup = function () {
+  dialogUser.classList.remove('hidden');
+  document.addEventListener('keydown', popupEscPressHandler);
+  setupSumbit.addEventListener('click', setupSubmitHandler);
+  setupSumbit.addEventListener('keydown', setupSubmitEnterHandler);
+};
+
+var closePopup = function () {
+  dialogUser.classList.add('hidden');
+  document.removeEventListener('keydown', popupEscPressHandler);
+  setupSumbit.removeEventListener('click', setupSubmitHandler);
+  setupSumbit.removeEventListener('keydown', setupSubmitEnterHandler);
+};
+
+setupOpen.addEventListener('click', function () {
+  openPopup();
+});
+
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    openPopup();
+  }
+});
+
+setupClose.addEventListener('click', function () {
+  closePopup();
+});
+
+setupClose.addEventListener('keydown', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    closePopup();
+  }
+});
