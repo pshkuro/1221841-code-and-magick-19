@@ -4,6 +4,7 @@ var NAMES = ['Иван', 'Хуан', 'Себастьян', 'Мария', 'Кри
 var SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 var COAT_COLORS = ['rgb(101, 137, 164)', 'rg(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
+var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
 // Переменная содержит массив объектов нужных нам wizard
 var wizardsData = createWizards(4);
@@ -41,7 +42,6 @@ function createWizards(num) {
 
 // показываем общий блок для выбора wizard
 var dialogUser = document.querySelector('.setup');
-// dialogUser.classList.remove('hidden');
 
 // показываем блок, где будут располагаться наши похожие wizard
 document.querySelector('.setup-similar').classList.remove('hidden');
@@ -131,3 +131,27 @@ setupClose.addEventListener('keydown', function (evt) {
     closePopup();
   }
 });
+
+// Реализовываем выбор цвета характеристик персонажа по нажатию
+var setupWizard = document.querySelector('.setup-wizard');
+var wizardCoat = setupWizard.querySelector('.wizard-coat');
+var wizardEyes = setupWizard.querySelector('.wizard-eyes');
+var fireballColor = document.querySelector('.setup-fireball-wrap');
+
+function setRandomFillColor(element, arr) {
+  element.style.fill = getRandomArrayItem(arr);
+}
+
+wizardCoat.addEventListener('click', function () {
+  setRandomFillColor(wizardCoat, COAT_COLORS);
+});
+
+wizardEyes.addEventListener('click', function () {
+  setRandomFillColor(wizardEyes, EYES_COLORS);
+});
+
+fireballColor.addEventListener('click', function () {
+  fireballColor.style.background = getRandomArrayItem(FIREBALL_COLORS);
+});
+
+
