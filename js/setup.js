@@ -4,6 +4,7 @@ var NAMES = ['Иван', 'Хуан', 'Себастьян', 'Мария', 'Кри
 var SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 var COAT_COLORS = ['rgb(101, 137, 164)', 'rg(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
+var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
 // Переменная содержит массив объектов нужных нам wizard
 var wizardsData = createWizards(4);
@@ -41,7 +42,6 @@ function createWizards(num) {
 
 // показываем общий блок для выбора wizard
 var dialogUser = document.querySelector('.setup');
-dialogUser.classList.remove('hidden');
 
 // показываем блок, где будут располагаться наши похожие wizard
 document.querySelector('.setup-similar').classList.remove('hidden');
@@ -72,5 +72,91 @@ var renderWizards = function (data) {
 };
 
 renderWizards(wizardsData);
+
+// Работаем над интерфейсом окна dialogUser
+var ESC_KEY = 'Escape';
+var ENTER_KEY = 'Enter';
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = dialogUser.querySelector('.setup-close');
+var setupSumbit = document.querySelector('.setup-submit');
+
+// Отправка формы на сервер через кнопку Сохранить
+var setupSubmitHandler = function () {
+  setupSumbit.submit();
+};
+
+var setupSubmitEnterHandler = function (evt) {
+  if (evt.key === ENTER_KEY) {
+    setupSumbit.submit();
+  }
+};
+
+// Открытие/закрытие окна
+var popupEscPressHandler = function (evt) {
+  if (evt.key === ESC_KEY && evt.target.tagName !== 'INPUT') {
+    closePopup();
+  }
+};
+
+var openPopup = function () {
+  dialogUser.classList.remove('hidden');
+  document.addEventListener('keydown', popupEscPressHandler);
+  setupSumbit.addEventListener('click', setupSubmitHandler);
+  setupSumbit.addEventListener('keydown', setupSubmitEnterHandler);
+};
+
+var closePopup = function () {
+  dialogUser.classList.add('hidden');
+  document.removeEventListener('keydown', popupEscPressHandler);
+  setupSumbit.removeEventListener('click', setupSubmitHandler);
+  setupSumbit.removeEventListener('keydown', setupSubmitEnterHandler);
+};
+
+setupOpen.addEventListener('click', function () {
+  openPopup();
+});
+
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    openPopup();
+  }
+});
+
+setupClose.addEventListener('click', function () {
+  closePopup();
+});
+
+setupClose.addEventListener('keydown', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    closePopup();
+  }
+});
+
+// Реализовываем выбор цвета характеристик персонажа по нажатию
+var setupWizard = document.querySelector('.setup-wizard');
+var wizardCoat = setupWizard.querySelector('.wizard-coat');
+var wizardCoatInput = document.querySelector('input[name="coat-color"]');
+var wizardEyes = setupWizard.querySelector('.wizard-eyes');
+var wizardEyesInput = document.querySelector('input[name="eyes-color"]');
+var fireballColor = document.querySelector('.setup-fireball-wrap');
+var fireballColorInput = document.querySelector('input[name="fireball-color"]');
+
+wizardCoat.addEventListener('click', function () {
+  var color = getRandomArrayItem(COAT_COLORS);
+  wizardCoat.style.fill = color;
+  wizardCoatInput.value = color;
+});
+
+wizardEyes.addEventListener('click', function () {
+  var color = getRandomArrayItem(EYES_COLORS);
+  wizardEyes.style.fill = color;
+  wizardEyesInput.value = color;
+});
+
+fireballColor.addEventListener('click', function () {
+  var color = getRandomArrayItem(FIREBALL_COLORS);
+  fireballColor.style.background = color;
+  fireballColorInput.value = color;
+});
 
 
