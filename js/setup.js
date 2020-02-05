@@ -98,11 +98,22 @@ var popupEscPressHandler = function (evt) {
   }
 };
 
+// при повторном открытии/закрытии диалога, положение диалога должно сбрасываться на изначальное
+var initialTop = dialogUser.style.top;
+var initialLeft = dialogUser.style.left;
+
+function restoreDialogPosition() {
+  dialogUser.style.top = initialTop;
+  dialogUser.style.left = initialLeft;
+}
+
 var openPopup = function () {
   dialogUser.classList.remove('hidden');
   document.addEventListener('keydown', popupEscPressHandler);
   setupSumbit.addEventListener('click', setupSubmitHandler);
   setupSumbit.addEventListener('keydown', setupSubmitEnterHandler);
+  restoreDialogPosition();
+
 };
 
 var closePopup = function () {
@@ -111,6 +122,7 @@ var closePopup = function () {
   setupSumbit.removeEventListener('click', setupSubmitHandler);
   setupSumbit.removeEventListener('keydown', setupSubmitEnterHandler);
 };
+
 
 setupOpen.addEventListener('click', function () {
   openPopup();
@@ -159,4 +171,64 @@ fireballColor.addEventListener('click', function () {
   fireballColorInput.value = color;
 });
 
+
+// Перемещение диалога
+var dialogHandle = dialogUser.querySelector('.upload');
+
+dialogHandle.addEventListener('mousedown', function onMouseDown(evt) {
+  evt.preventDefault();
+
+  // Координаты курсора в момент клика относительно окна, для событий мыши.
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var dragged = false;
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    dragged = true;
+
+    // Расстояние на которое двигается курсор от начального положения (где он был по щелчку) до опускания кнопки мышки
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    dialogUser.style.top = (dialogUser.offsetTop - shift.y) + 'px';
+    dialogUser.style.left = (dialogUser.offsetLeft - shift.x) + 'px';
+
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+
+    if (dragged) {
+      var onClickPreventDefault = function (clickEvt) {
+        clickEvt.preventDefault();
+        dialogHandle.removeEventListener('click', onClickPreventDefault);
+      };
+      dialogHandle.addEventListener('click', onClickPreventDefault);
+    }
+
+  };
+
+  // Обработчики события передвижения мыши и отпускания кнопки мыши
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+
+  dialogUser.style.top = startCoords.y + 'px';
+  dialogUser.style.left = startCoords.x + 'px';
+
+
+});
 
