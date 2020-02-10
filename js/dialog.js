@@ -12,6 +12,7 @@
   var setupOpen = document.querySelector('.setup-open');
   var setupClose = window.dialogUser.querySelector('.setup-close');
   var setupSumbit = document.querySelector('.setup-submit');
+  var form = window.dialogUser.querySelector('.setup-wizard-form');
 
   // Отправка формы на сервер через кнопку Сохранить
   var setupSubmitHandler = function () {
@@ -76,4 +77,12 @@
       closePopup();
     }
   });
+
+  // При отправке формы отменим действие по умолчанию и скроем диалог, как только данные будут сохранены
+  // form.addEventListener('submit', function (evt) {
+  //   window.upload(new FormData(form), function (response) {
+  //     window.dialogUser.classList.add('hidden');
+  //   });
+  //   evt.preventDefault();
+  // });
 })();
