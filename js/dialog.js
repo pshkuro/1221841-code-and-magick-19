@@ -79,10 +79,10 @@
   });
 
   // При отправке формы отменим действие по умолчанию и скроем диалог, как только данные будут сохранены
-  // form.addEventListener('submit', function (evt) {
-  //   window.upload(new FormData(form), function (response) {
-  //     window.dialogUser.classList.add('hidden');
-  //   });
-  //   evt.preventDefault();
-  // });
+  form.addEventListener('submit', function (evt) {
+    window.save(new FormData(form), function (response) {
+      window.dialogUser.classList.add('hidden');
+    });
+    evt.preventDefault();
+  });
 })();

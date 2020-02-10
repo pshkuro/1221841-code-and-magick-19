@@ -59,7 +59,7 @@
     document.querySelector('.setup-similar').classList.remove('hidden');
   };
 
-  var errorHandler = function (errorMessage) {
+  window.errorHandler = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
     node.style.position = 'absolute';
@@ -71,7 +71,7 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  window.load(successHandler, errorHandler);
+  window.load(successHandler, window.errorHandler);
 
   // window.renderWizards = function (data) {
   //   var fragment = document.createDocumentFragment();

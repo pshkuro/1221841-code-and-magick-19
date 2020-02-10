@@ -12,18 +12,6 @@
     NOT_FOUND: 404
   };
 
-  // window.upload = function (data, onSuccess) {
-  //   var xhr = new XMLHttpRequest();
-  //   xhr.responseType = 'json';
-
-  //   xhr.addEventListener('load', function () {
-  //     onSuccess(xhr.response);
-  //   });
-
-  //   xhr.open('POST', URL);
-  //   xhr.send(data);
-  // };
-
   window.load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -70,6 +58,43 @@
 
 
     xhr.send();
+  };
+
+  window.save = function (data, onLoad, onError) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+
+    xhr.open('POST', URL);
+
+    xhr.addEventListener('load', function () {
+      var error;
+      switch (xhr.status) {
+        case statusCode.OK:
+          onLoad(xhr.response);
+          break;
+
+        case statusCode.BAD_REQUEST:
+          error = 'Неверный запрос';
+          break;
+
+        case statusCode.USER_NOT_AUTHORIZES:
+          error = 'Пользователь не авторизован';
+          break;
+
+        case statusCode.NOT_FOUND:
+          error = 'Ничего не найдено';
+          break;
+
+        default:
+          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
+      }
+
+      if (error) {
+        onError(error);
+      }
+    });
+
+    xhr.send(data);
   };
 
 })();
