@@ -38,7 +38,7 @@
           break;
 
         default:
-          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
+          error = 'Что-то пошло не так. Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
       }
 
       if (error) {
@@ -60,15 +60,51 @@
     xhr.send();
   };
 
-  window.save = function (data, onLoad) {
+  window.save = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
+    xhr.open('POST', URL);
+
     xhr.addEventListener('load', function () {
-      onLoad(xhr.response);
+
+      var error;
+      switch (xhr.status) {
+        case statusCode.OK:
+          onLoad(xhr.response);
+          break;
+
+        case statusCode.BAD_REQUEST:
+          error = 'Неверный запрос';
+          break;
+
+        case statusCode.USER_NOT_AUTHORIZES:
+          error = 'Пользователь не авторизован';
+          break;
+
+        case statusCode.NOT_FOUND:
+          error = 'Ничего не найдено';
+          break;
+
+        default:
+          error = 'Что-то пошло не так. Cтатус ответа:' + xhr.status + ' ' + xhr.statusText;
+      }
+
+      if (error) {
+        onError(error);
+      }
     });
 
-    xhr.open('POST', URL);
+    xhr.addEventListener('error', function () {
+      onError('Произошла ошибка соединения');
+    });
+
+    xhr.timeout = TIMEOUT_IN_MS;
+
+    xhr.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+    });
+
     xhr.send(data);
   };
 })();

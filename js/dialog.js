@@ -11,19 +11,7 @@
   var ENTER_KEY = 'Enter';
   var setupOpen = document.querySelector('.setup-open');
   var setupClose = window.dialogUser.querySelector('.setup-close');
-  var setupSumbit = document.querySelector('.setup-submit');
   var form = window.dialogUser.querySelector('.setup-wizard-form');
-
-  // Отправка формы на сервер через кнопку Сохранить
-  var setupSubmitHandler = function () {
-    form.submit();
-  };
-
-  var setupSubmitEnterHandler = function (evt) {
-    if (evt.key === ENTER_KEY) {
-      form.submit();
-    }
-  };
 
   // Открытие/закрытие окна
   var popupEscPressHandler = function (evt) {
@@ -44,8 +32,6 @@
   var openPopup = function () {
     window.dialogUser.classList.remove('hidden');
     document.addEventListener('keydown', popupEscPressHandler);
-    setupSumbit.addEventListener('click', setupSubmitHandler);
-    setupSumbit.addEventListener('keydown', setupSubmitEnterHandler);
     restoreDialogPosition();
 
   };
@@ -53,8 +39,6 @@
   var closePopup = function () {
     window.dialogUser.classList.add('hidden');
     document.removeEventListener('keydown', popupEscPressHandler);
-    setupSumbit.removeEventListener('click', setupSubmitHandler);
-    setupSumbit.removeEventListener('keydown', setupSubmitEnterHandler);
   };
 
 
@@ -80,9 +64,9 @@
 
   // При отправке формы отменим действие по умолчанию и скроем диалог, как только данные будут сохранены
   form.addEventListener('submit', function (evt) {
-    window.save(new FormData(form), function (response) {
+    window.save(new FormData(form), function () {
       window.dialogUser.classList.add('hidden');
-    });
+    }, window.errorHandler);
     evt.preventDefault();
   });
 })();

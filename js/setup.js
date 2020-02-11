@@ -47,11 +47,12 @@
   };
 
   // Отображаем wizard на странице - заполняем фрагмент
-  var successHandler = function (data) {
+  var successHandler = function (datas) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < MAX_SIMILAR_WIZARD_COUNT; i++) {
-      fragment.appendChild(createWizardElement(data[i]));
+    var randomWizardArray = window.getRandomArray(datas, MAX_SIMILAR_WIZARD_COUNT);
+    for (var i = 0; i < randomWizardArray.length; i++) {
+      fragment.appendChild(createWizardElement(randomWizardArray[i]));
     }
 
     similarListElement.appendChild(fragment);
@@ -59,6 +60,7 @@
     document.querySelector('.setup-similar').classList.remove('hidden');
   };
 
+  // Обработчик ошибок
   window.errorHandler = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
@@ -72,18 +74,6 @@
   };
 
   window.load(successHandler, window.errorHandler);
-
-  // window.renderWizards = function (data) {
-  //   var fragment = document.createDocumentFragment();
-
-  //   for (var i = 0; i < data.length; i++) {
-  //     fragment.appendChild(createWizardElement(data[i]));
-  //   }
-
-  //   similarListElement.appendChild(fragment);
-  // };
-
-  // window.renderWizards(wizardsData);
 
   // Реализовываем выбор цвета характеристик персонажа по нажатию
   var setupWizard = document.querySelector('.setup-wizard');
