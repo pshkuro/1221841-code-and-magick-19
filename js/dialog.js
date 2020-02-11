@@ -16,12 +16,12 @@
 
   // Отправка формы на сервер через кнопку Сохранить
   var setupSubmitHandler = function () {
-    setupSumbit.submit();
+    form.submit();
   };
 
   var setupSubmitEnterHandler = function (evt) {
     if (evt.key === ENTER_KEY) {
-      setupSumbit.submit();
+      form.submit();
     }
   };
 

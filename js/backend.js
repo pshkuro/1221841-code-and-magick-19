@@ -60,41 +60,15 @@
     xhr.send();
   };
 
-  window.save = function (data, onLoad, onError) {
+  window.save = function (data, onLoad) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
-    xhr.open('POST', URL);
-
     xhr.addEventListener('load', function () {
-      var error;
-      switch (xhr.status) {
-        case statusCode.OK:
-          onLoad(xhr.response);
-          break;
-
-        case statusCode.BAD_REQUEST:
-          error = 'Неверный запрос';
-          break;
-
-        case statusCode.USER_NOT_AUTHORIZES:
-          error = 'Пользователь не авторизован';
-          break;
-
-        case statusCode.NOT_FOUND:
-          error = 'Ничего не найдено';
-          break;
-
-        default:
-          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
-      }
-
-      if (error) {
-        onError(error);
-      }
+      onLoad(xhr.response);
     });
 
+    xhr.open('POST', URL);
     xhr.send(data);
   };
-
 })();
