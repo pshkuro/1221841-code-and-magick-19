@@ -72,16 +72,16 @@
 
   // Перезаписываем обработчики-пустышки,
   // объявленные в wizard.js
-  window.wizard.eyesChangeHandler = function (color) {
+  window.wizard.eyesChangeHandler = window.debounce(function (color) {
     eyesColor = color;
     updateWizards();
-  };
+  });
 
   // И обработчик на смену цвета мантии
-  window.wizard.coatChangeHandler = function (color) {
+  window.wizard.coatChangeHandler = window.debounce(function (color) {
     coatColor = color;
     updateWizards();
-  };
+  });
 
   // Загрузка данных на страницу
   function successHandler(data) {
