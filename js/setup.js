@@ -30,35 +30,66 @@
   // // Переменная содержит массив объектов нужных нам wizard
   // var wizardsData = createWizards(4);
 
+  var coatColor;
+  var eyesColor;
+  var wizards = [];
 
-  var MAX_SIMILAR_WIZARD_COUNT = 4;
-  var similarListElement = document.querySelector('.setup-similar-list'); // элемент, в кот будем вставлять wizard
-  var similarWizardItemElement = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
+  // Функция определения ранга волшебника (их отличности дру от друга)
+  var getRank = function (wizard) {
+    var rank = 0;
 
-  // Добавляем в шаблон доп данные про wizard
-  var createWizardElement = function (wizard) {
-    var wizardElement = similarWizardItemElement.cloneNode(true);
-
-    wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
-
-    return wizardElement;
-  };
-
-  // Отображаем wizard на странице - заполняем фрагмент
-  var successHandler = function (datas) {
-    var fragment = document.createDocumentFragment();
-
-    var randomWizardArray = window.getRandomArray(datas, MAX_SIMILAR_WIZARD_COUNT);
-    for (var i = 0; i < randomWizardArray.length; i++) {
-      fragment.appendChild(createWizardElement(randomWizardArray[i]));
+    if (wizard.colorCoat === coatColor) {
+      rank += 2;
+    }
+    if (wizard.colorEyes === eyesColor) {
+      rank += 1;
     }
 
-    similarListElement.appendChild(fragment);
-
-    document.querySelector('.setup-similar').classList.remove('hidden');
+    return rank;
   };
+
+  // Указываем, что делать, если маги равны (Сортируем в алфавитном порядке)
+  var namesComparator = function (left, right) {
+    if (left > right) {
+      return 1;
+    } else if (left < right) {
+      return -1;
+    } else {
+      return 0;
+    }
+  };
+
+  // Фильтруем wizards в соответствии с выбором характеристик гл персонажа (плащ/глаза)
+  var updateWizards = function () {
+    window.render(wizards.sort(function (left, right) {
+      var rankDiff = getRank(right) - getRank(left);
+      if (rankDiff === 0) {
+        rankDiff = namesComparator(left.name, right.name);
+      }
+      return rankDiff;
+    }));
+  };
+
+  // Перезаписываем обработчики-пустышки,
+  // объявленные в wizard.js
+  window.wizard.eyesChangeHandler = function (color) {
+    eyesColor = color;
+    updateWizards();
+  };
+
+  // И обработчик на смену цвета мантии
+  window.wizard.coatChangeHandler = function (color) {
+    coatColor = color;
+    updateWizards();
+  };
+
+  // Загрузка данных на страницу
+  function successHandler(data) {
+    wizards = data;
+    updateWizards();
+  }
+
+  window.load(successHandler, window.errorHandler);
 
   // Обработчик ошибок
   window.errorHandler = function (errorMessage) {
@@ -72,35 +103,5 @@
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   };
-
-  window.load(successHandler, window.errorHandler);
-
-  // Реализовываем выбор цвета характеристик персонажа по нажатию
-  var setupWizard = document.querySelector('.setup-wizard');
-  var wizardCoat = setupWizard.querySelector('.wizard-coat');
-  var wizardCoatInput = document.querySelector('input[name="coat-color"]');
-  var wizardEyes = setupWizard.querySelector('.wizard-eyes');
-  var wizardEyesInput = document.querySelector('input[name="eyes-color"]');
-  var fireballColor = document.querySelector('.setup-fireball-wrap');
-  var fireballColorInput = document.querySelector('input[name="fireball-color"]');
-
-  wizardCoat.addEventListener('click', function () {
-    var color = window.getRandomArrayItem(window.data.COAT_COLORS);
-    wizardCoat.style.fill = color;
-    wizardCoatInput.value = color;
-  });
-
-  wizardEyes.addEventListener('click', function () {
-    var color = window.getRandomArrayItem(window.data.EYES_COLORS);
-    wizardEyes.style.fill = color;
-    wizardEyesInput.value = color;
-  });
-
-  fireballColor.addEventListener('click', function () {
-    var color = window.getRandomArrayItem(window.data.FIREBALL_COLORS);
-    fireballColor.style.background = color;
-    fireballColorInput.value = color;
-  });
-
 })();
 
