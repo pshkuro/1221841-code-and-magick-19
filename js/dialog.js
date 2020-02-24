@@ -31,13 +31,14 @@
 
   var openPopup = function () {
     window.dialogUser.classList.remove('hidden');
+    window.fileChooser.addEventListener('change', window.fileChooseHandler);
     document.addEventListener('keydown', popupEscPressHandler);
     restoreDialogPosition();
-
   };
 
   var closePopup = function () {
     window.dialogUser.classList.add('hidden');
+    window.fileChooser.removeEventListener('change', window.fileChooseHandler);
     document.removeEventListener('keydown', popupEscPressHandler);
   };
 
