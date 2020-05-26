@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  // Загрузка данных на сервер
   var URL = 'https://js.dump.academy/code-and-magick';
   var URL_LOAD = 'https://js.dump.academy/code-and-magick/data';
   var TIMEOUT_IN_MS = 10000;
